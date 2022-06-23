@@ -58,7 +58,7 @@ export default class Lpk {
             file: `./images/${basename(file)}`
         }
         this._manifest.images.push(image);
-        this.addFile(file, 'image');
+        this.addFile(file, 'images');
     }
 
     addFile(file: string, target?: string) {
