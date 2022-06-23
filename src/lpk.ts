@@ -3,7 +3,7 @@ import { mkdirp } from 'fs-extra';
 import { join, basename } from 'path';
 import { IManifest, manifest, IImage } from './manifest';
 import { binInfo, IFileInfo } from './util/utils';
-import { getLSCloudProjectInfo, getVersion } from './util/ux';
+import { getLSCloudProjectInfo, getVersion, getChip } from './util/ux';
 import dateFormat from './util/dateFormat';
 
 export default class Lpk {
@@ -34,8 +34,14 @@ export default class Lpk {
         this._manifest.version = await getVersion();
     }
 
-    setChip(chip: string) {
+    setName(name: string) {
+        this._manifest.name = name;
+    }
+
+    async setChip(chip: string) {
+        chip = chip ?? await getChip();
         this._manifest.chip = chip;
+
     }
 
     setAppver(appver: string) {
@@ -72,6 +78,7 @@ export default class Lpk {
         const date = dateFormat('yyyyMMdd-hh-mm');
         const targetPath = join(target, `./${this._manifest.name}-${this._manifest.version}-${date}-factory.lpk`);
         this._zip.writeZip(targetPath);
+        return targetPath;
     }
 
 }

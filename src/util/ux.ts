@@ -71,3 +71,13 @@ export const getVersion = async (): Promise<string> => {
   })
   return info.version;
 }
+
+export const getChip = async (): Promise<string> => {
+  const info = await inquirer.prompt({
+    name: 'chip',
+    type: 'input',
+    message: '请输入芯片模组',
+    default: 'csk6002'
+  })
+  return info.chip;
+}
