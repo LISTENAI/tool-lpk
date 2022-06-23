@@ -1,0 +1,32 @@
+{
+  "name": "@tool/lpk",
+  "version": "1.0.0",
+  "description": "LISA plugin for Zephyr",
+  "main": "./lib/main.js",
+  "author": "LISTENAI",
+  "maintainers": [
+    "lpmadmin <lpm.admin@listenai.com>",
+    "zbzhao <zbzhao@listenai.com>"
+  ],
+  "license": "UNLICENSED",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LISTENAI/tool-lpk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LISTENAI/tool-lpk/issues"
+  },
+  "homepage": "https://github.com/LISTENAI/tool-lpk#readme",
+  "lisa": {},
+  "dependencies": {
+    "@listenai/lisa_core": "^2.1.3"
+  }
+}
