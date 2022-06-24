@@ -20,31 +20,31 @@ export const getLSCloudProjectInfo = async (): Promise<ProjectInfo> => {
   while (true) {
 
     let info = await inquirer.prompt([
-      {
-        name: 'enabled',
-        type: 'confirm',
-        message: '是否需要上传量产日志到LSCloud'
-      },
+      // {
+      //   name: 'enabled',
+      //   type: 'confirm',
+      //   message: '是否需要上传量产日志到LSCloud'
+      // },
       {
         name: 'id',
         type: 'input',
         message: '请输入LSCloud项目id',
-        when: (info) => {
-          return info.enabled
-        }
+        // when: (info) => {
+        //   return info.enabled
+        // }
       },
       {
         name: 'name',
         type: 'input',
         message: '请输入LSCloud项目名称',
         when: (info) => {
-          return info.enabled && info.id
+          return info.id
         }
       }
     ])
-    if (!info.enabled) {
-      break;
-    }
+    // if (!info.enabled) {
+    //   break;
+    // }
     license_key = await getLogToken(info.id) || ''
     if (license_key) {
       id = info.id;
