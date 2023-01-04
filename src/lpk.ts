@@ -1,15 +1,19 @@
 import Lisa from '@listenai/lisa_core';
-import { mkdirp } from 'fs-extra';
+import {mkdirp, pathExists, readFile} from 'fs-extra';
 import { join, basename } from 'path';
 import { IManifest, manifest, IImage } from './manifest';
 import { binInfo, IFileInfo } from './util/utils';
 import { getLSCloudProjectInfo, getVersion, getChip } from './util/ux';
 import dateFormat from './util/dateFormat';
+import {tmpdir} from "os";
 
 export default class Lpk {
     _zip: any;
 
     _manifest: IManifest;
+
+    _lpk_path: string | undefined;
+    _tmp_path: string | undefined;
 
     constructor(option?: IManifest) {
         this._zip = Lisa.fs.project.zip();
@@ -81,4 +85,23 @@ export default class Lpk {
         return targetPath;
     }
 
+    async load(lpk_path: string) {
+        this._lpk_path = lpk_path;
+
+        if (!this._lpk_path) {
+            console.error('未指定lpk路径');
+            return;
+        }
+        const date = dateFormat('yyyyMMddhhmmss');
+        this._tmp_path = join(tmpdir(), `lpk_${date}`);
+        await Lisa.fs.project.unzip(this._lpk_path, this._tmp_path);
+
+        const manifestPath = join(this._tmp_path, 'manifest.json');
+        if (!(await pathExists(manifestPath))) {
+            console.error('manifest.json不存在');
+            return;
+        }
+
+        this._manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
+    }
 }
