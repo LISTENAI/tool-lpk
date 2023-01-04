@@ -102,6 +102,24 @@ export default class Lpk {
             return;
         }
 
-        this._manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
+        const intendedManifest: IManifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
+        for (const img of intendedManifest.images) {
+            const imgPath: string = join(this._tmp_path, img.file);
+            if (!(await pathExists(imgPath))) {
+                console.error(`镜像文件不存在。Path = ${imgPath}`);
+                return;
+            }
+            const fileInfo: IFileInfo = await binInfo(imgPath);
+            if (fileInfo.size !== img.size || fileInfo.md5 !== img.md5) {
+                console.error(`镜像文件校验失败。Path = ${imgPath}, 
+Documented MD5 = ${img.md5}, 
+Actual MD5 = ${fileInfo.md5}, 
+Documented size = ${img.size}, 
+Actual size = ${fileInfo.size}\n`);
+                return;
+            }
+        }
+
+        this._manifest = intendedManifest;
     }
 }
